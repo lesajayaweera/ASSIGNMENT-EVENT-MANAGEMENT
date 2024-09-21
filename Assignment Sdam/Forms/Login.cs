@@ -14,6 +14,7 @@ namespace Assignment_Sdam
 {
     public partial class Login : Form
     {
+        
         public Login()
         {
             InitializeComponent();
@@ -58,8 +59,10 @@ namespace Assignment_Sdam
             
             if (Role == "Admin")
             {
-                Person p1 = new Admin(Username, Password, Role);
-                p1.Login(p1, this);
+                AdminController admin = new AdminController();
+                admin.Login(Username, Password,Role,this);
+
+                
             }
             else if (Role == "Organizer")
             {

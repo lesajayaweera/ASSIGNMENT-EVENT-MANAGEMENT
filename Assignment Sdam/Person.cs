@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,6 +45,11 @@ namespace Assignment_Sdam
             get { return password; }
             set { password = value; }
         }
+
+
+        private string connectionString = "Server=127.0.0.1;Database=event_management_system;User ID=root;Password=;";
+
+
 
         public Person(string name, string email, string phoneNo, string role, string password)
         {
@@ -99,7 +106,7 @@ namespace Assignment_Sdam
         public bool Validateemail()
         {
             // Updated validation logic
-            if (!string.IsNullOrWhiteSpace(Email) && Email.Contains("@")&& Email.Length >=25)
+            if (!string.IsNullOrWhiteSpace(Email) && Email.Contains("@")&& Email.Length <=25)
             {
                 return true;
             }
@@ -135,6 +142,142 @@ namespace Assignment_Sdam
             {
                 MessageBox.Show("Invalid Password! It should be between 8 and 15 characters long and contain only letters and digits.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
+            }
+        }
+
+
+        // -------------------------------------------------------------
+        // to save the person data to the database under the user_table 
+        public void SaveData(Person person)
+        {
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = "INSERT INTO user_table (name, password, email, phonenumber, role) " +
+                                   "VALUES (@name, @password, @email, @phoneNumber, @role)";
+
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        // Check if any required field is null or empty (optional validation)
+                        if (string.IsNullOrEmpty(person.Name) || string.IsNullOrEmpty(person.Password) ||
+                            string.IsNullOrEmpty(person.Email) || string.IsNullOrEmpty(person.PhoneNo) ||
+                            string.IsNullOrEmpty(person.Role))
+                        {
+                            MessageBox.Show("Please fill in all fields before saving.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        // Add parameters to the command
+                        command.Parameters.AddWithValue("@name", person.Name);
+                        command.Parameters.AddWithValue("@password", person.Password); // Ensure Password exists in Person class
+                        command.Parameters.AddWithValue("@email", person.Email);
+                        command.Parameters.AddWithValue("@phoneNumber", person.PhoneNo); // Adjust to your database field if necessary
+                        command.Parameters.AddWithValue("@role", person.Role);
+
+                        // Execute query and show rows affected
+                        int rowsAffected = command.ExecuteNonQuery();
+                        Console.WriteLine("Rows affected: " + rowsAffected);
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    MessageBox.Show("Database error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+
+        // to check whether the user entered the validated data based on the Database and table user_table
+        public bool AuthenticateUser(Person person)
+        {
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = "SELECT COUNT(*) FROM user_table WHERE name = @username AND password = @password AND role = @role";
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@username", person.Name);
+                        command.Parameters.AddWithValue("@password", person.Password);
+                        command.Parameters.AddWithValue("@role", person.Role);
+
+                        int countUser = Convert.ToInt32(command.ExecuteScalar());
+                        return countUser > 0;
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    MessageBox.Show("Database error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+        // to check whether the user entered data exists in the database in register form
+
+        public bool CredentialsExist(Person person)
+        {
+            string query = "SELECT COUNT(*) FROM user_table WHERE name = @Username OR email = @Email";
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        // Add parameters to the command
+                        command.Parameters.AddWithValue("@Username", person.Name);
+                        command.Parameters.AddWithValue("@Email", person.Email);
+
+                        // Execute the scalar query to get the count
+                        int userCount = Convert.ToInt32(command.ExecuteScalar());
+
+                        // If count > 0, either username or email exists
+                        if (userCount > 0)
+                        {
+                            MessageBox.Show("The email or Username is already registered. Please try another.", "Duplicate Credentials", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    MessageBox.Show("An error occurred while checking the credentials: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                finally
+                {
+                    // Ensure connection is closed
+                    if (connection.State == ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
+                }
             }
         }
 

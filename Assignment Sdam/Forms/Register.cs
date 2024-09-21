@@ -74,8 +74,11 @@ namespace Assignment_Sdam
             {
                 if (AdminCode == "Admin123")
                 {
-                    person = new Admin(name, email, TelNo,"Admin", password);
-                    person.Register(person,this);
+
+                    AdminController admin = new AdminController();
+                    admin.Register(name, email, TelNo, "Admin", password, this);
+                    //person = new Admin(name, email, TelNo,"Admin", password);
+                    //person.Register(person,this);
                 }
                 else
                 {
