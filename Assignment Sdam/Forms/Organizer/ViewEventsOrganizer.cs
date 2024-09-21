@@ -14,9 +14,9 @@ namespace Assignment_Sdam.Forms.Organizer
     {
         private Person person;
         private Form form;
-        private Event Event;
-        private string eventName;
-        private int eventId;
+        
+        private int selected_eventId;
+        private string selected_eventName;
         public ViewEventsOrganizer(Person person, Form form)
         {
             InitializeComponent();
@@ -65,9 +65,27 @@ namespace Assignment_Sdam.Forms.Organizer
 
         private void ViewEventDetailBtn_VeiwEvent_Click(object sender, EventArgs e)
         {
-            ViewEventDetails v1 = new ViewEventDetails(person, this);
+            ViewEventDetails v1 = new ViewEventDetails(person, this,  selected_eventId, selected_eventName);
             v1.Show();
             this.Hide();
+        }
+
+        private void VeiwEvent_DataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                // Get the selected row
+                DataGridViewRow selectedRow = VeiwEvent_DataGrid.Rows[e.RowIndex];
+
+                // Retrieve the EventId (assuming it's stored in a column named "EventId")
+                selected_eventId = Convert.ToInt32(selectedRow.Cells["EventId"].Value);
+
+                // Retrieve the EventName (assuming it's stored in a column named "EventName")
+                selected_eventName = selectedRow.Cells["EventName"].Value.ToString();
+
+                MessageBox.Show($"Selected event Id ={selected_eventName}  and selected event name = {selected_eventId}","Event Selection",MessageBoxButtons.OK,MessageBoxIcon.Information);
+
+            }
         }
     }
 }

@@ -43,9 +43,6 @@ namespace Assignment_Sdam
             Register registerForm = new Register();
             registerForm.Show();
             this.Hide();
-
-
-
         }
 
         private void LoginButton_Click(object sender, EventArgs e)
@@ -61,39 +58,25 @@ namespace Assignment_Sdam
             {
                 AdminController admin = new AdminController();
                 admin.Login(Username, Password,Role,this);
-
-                
             }
             else if (Role == "Organizer")
             {
                 OrganizerController organizer = new OrganizerController();
-                MessageBox.Show("hello");
+                
                 organizer.Login(Username, Password,Role,this);
                
             }
             else if (Role == "Participant")
             {
                 ParticipantController participant = new ParticipantController();
-                MessageBox.Show("hello");
+                
 
                 participant.Login(Username, Password, Role, this);
             }
             else
             {
                 MessageBox.Show("Please Select the role", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
             }
-
-            
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Logging is unSucessFul", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            //}
-
-
-
         }
 
 

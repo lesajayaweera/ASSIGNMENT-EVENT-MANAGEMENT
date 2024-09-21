@@ -75,6 +75,7 @@
             BAckBtn_ViewEventsDetails.SizeMode = PictureBoxSizeMode.StretchImage;
             BAckBtn_ViewEventsDetails.TabIndex = 26;
             BAckBtn_ViewEventsDetails.TabStop = false;
+            BAckBtn_ViewEventsDetails.Click += BAckBtn_ViewEventsDetails_Click;
             // 
             // dataGridView_VeiwEventDetail_Org
             // 
@@ -106,6 +107,7 @@
             Controls.Add(panel1);
             Name = "ViewEventDetails";
             Text = "ViewEventDetails";
+            Load += ViewEventDetails_Load;
             ((System.ComponentModel.ISupportInitialize)BAckBtn_ViewEventsDetails).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView_VeiwEventDetail_Org).EndInit();
             panel1.ResumeLayout(false);

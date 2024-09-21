@@ -184,6 +184,7 @@
             VeiwEvent_DataGrid.RowHeadersWidth = 51;
             VeiwEvent_DataGrid.Size = new Size(690, 362);
             VeiwEvent_DataGrid.TabIndex = 9;
+            VeiwEvent_DataGrid.CellContentClick += VeiwEvent_DataGrid_CellContentClick;
             // 
             // ViewEventsOrganizer
             // 
