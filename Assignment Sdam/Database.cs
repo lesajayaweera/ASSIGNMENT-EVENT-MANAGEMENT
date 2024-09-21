@@ -155,131 +155,11 @@ namespace Assignment_Sdam
         //-------------------------------------------------------------Event Class---------------------------------------------------------------------------------------
 
         // to save the event in the event_table 
-        public void SaveEvent(EventController ceremony)
-        {
-            string connectionString = "Server=127.0.0.1;Database=event_management_system;User ID=root;Password=;";
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open(); 
-                    string query = "INSERT INTO event_table (EventId, EventName, EventLocation, NParticipants, Time, EventOrganizer, EventDeadline) VALUES (@EventId, @EventName, @EventLocation, @NParticipants, @Time, @EventOrganizer, @EventDeadline)";
-
-                    using (MySqlCommand command = new MySqlCommand(query, connection))
-                    {
-                        command.Parameters.AddWithValue("@EventId", ceremony.EventId);
-                        command.Parameters.AddWithValue("@EventName", ceremony.EventName);
-                        command.Parameters.AddWithValue("@EventLocation", ceremony.EventLocation);
-                        command.Parameters.AddWithValue("@NParticipants", ceremony.NoOfParticipants);
-                        command.Parameters.AddWithValue("@Time", ceremony.eventtime);
-                        command.Parameters.AddWithValue("@EventOrganizer", ceremony.Organizer);
-                        command.Parameters.AddWithValue("@EventDeadline", ceremony.Deadline);
-
-                        int rowsAffected = command.ExecuteNonQuery();
-                        Console.WriteLine("Rows affected: " + rowsAffected);
-                    }
-                }
-                catch (MySqlException ex)
-                {
-                    MessageBox.Show("Database error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-        }
+        
 
 
         // to get the event id from the event_table from the database to created a unique table for each event created in the event_table
-        private int GetEventId(EventController ceremony)
-        {
-            int eventId = -1;
-            string connectionString = "Server=127.0.0.1;Database=event_management_system;User ID=root;Password=;";
-
-            try
-            {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
-                {
-                    string query = "SELECT eventId FROM event_table WHERE EventName = @eventName AND EventOrganizer = @organizer";
-                    MySqlCommand command = new MySqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@eventName", ceremony.EventName);
-                    command.Parameters.AddWithValue("@organizer", ceremony.Organizer);
-
-                    connection.Open();
-                    object result = command.ExecuteScalar();
-                    if (result != null)
-                    {
-                        eventId = Convert.ToInt32(result); // Assign the retrieved eventId
-                    }
-                }
-            }
-            catch (MySqlException ex)
-            {
-                MessageBox.Show($"Database error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            return eventId;
-        }
-
-
-        // to create a seperate table when a event created to store Joined participants  data
-        public void CreateTable(EventController ceremony)
-        {
-            int eventId = GetEventId(ceremony);
-
-            if (eventId != -1)
-            {
-                string connectionString = "Server=127.0.0.1;Database=event_management_system;User ID=root;Password=;";
-
-                string createTableQuery = $@"
-                CREATE TABLE `{ceremony.EventName.ToLower().Replace(" ", "").Replace("'", "").Replace("\"", "")}_{eventId}` (
-                participantId INT PRIMARY KEY AUTO_INCREMENT,
-                UserTable_ID INT,
-                name VARCHAR(50) NOT NULL,
-                email VARCHAR(50) NOT NULL,
-                telno VARCHAR(15) NOT NULL,
-                RegistrationDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-                );";
-
-
-
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
-                {
-                    try
-                    {
-                        connection.Open();
-                        using (MySqlCommand command = new MySqlCommand(createTableQuery, connection))
-                        {
-                            command.ExecuteNonQuery();
-                            Console.WriteLine("Table created successfully.");
-                        }
-                    }
-                    catch (MySqlException ex)
-                    {
-                        MessageBox.Show($"Database error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-
-            }
-            else
-            {
-                MessageBox.Show("Event Didnot Created", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
+        
         // to display the all the events  in the event_table to the organizer and the participants
 
         public void DisplayAllEvents(DataGridView datagrid)
@@ -407,7 +287,7 @@ namespace Assignment_Sdam
 
 
         //=================================================================================================================================================================
-        public void UpdateEvent(EventController ceromony)
+        public void UpdateEvent(Event ceromony)
         {
             string Ptablename = getTheTableName(ceromony);
            
@@ -477,7 +357,7 @@ namespace Assignment_Sdam
             return eventName;
         }
 
-        private void ChangetableName(EventController ceremony, string Ptablename)
+        private void ChangetableName(Event ceremony, string Ptablename)
         {
             
 
@@ -527,7 +407,7 @@ namespace Assignment_Sdam
                 }
             }
         }
-        private string getTheTableName (EventController ceromony)
+        private string getTheTableName (Event ceromony)
         {
             string PeventName = GetEventName(ceromony.EventId);
 
@@ -918,9 +798,9 @@ namespace Assignment_Sdam
 
         }
         // to load the event data tothe event class
-        public EventController loadEventData(int selectedEventId, string selectedEventName)
+        public Event loadEventData(int selectedEventId, string selectedEventName)
         {
-            EventController eventData = null; // Create a null Event object initially
+            Event eventData = null; // Create a null Event object initially
             string query = "SELECT EventId, EventName,EventOrganizer,EventLocation ,Time FROM event_table WHERE EventId = @EventId AND EventName = @EventName";
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -935,7 +815,7 @@ namespace Assignment_Sdam
                     if (reader.Read())
                     {
                         // Populate the Event object with data from the database
-                        eventData = new EventController
+                        eventData = new Event
                         {
                             EventId = reader.GetInt32("EventId"),
                             Organizer = reader.GetString("EventOrganizer"),
@@ -1085,7 +965,7 @@ namespace Assignment_Sdam
                 }
             }
         }
-        public bool isFull(EventController ceromony)
+        public bool isFull(Event ceromony)
         {
             // Construct the table name by sanitizing the EventName
             string tablename = $"{ceromony.EventName.ToLower().Replace(" ", "").Replace("'", "").Replace("\"", "")}_{ceromony.EventId}";

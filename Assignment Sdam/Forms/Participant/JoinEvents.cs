@@ -81,7 +81,7 @@ namespace Assignment_Sdam.Forms.Participant
             bool hasJoinned = database.HasParticipantAlreadyJoined(Person, selected_Eventname, selected_Id);
             if (!hasJoinned)
             {
-                EventController e1 = new EventController(selected_Id, selected_Eventname);
+                Event e1 = new Event(selected_Id, selected_Eventname);
                 bool isEventFull = database.isFull(e1);
                 if (!isEventFull)
                 {

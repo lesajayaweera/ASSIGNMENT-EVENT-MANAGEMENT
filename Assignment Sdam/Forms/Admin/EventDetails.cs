@@ -12,7 +12,7 @@ namespace Assignment_Sdam.Forms.Admin
 {
     public partial class EventDetails : Form
     {
-        private EventController ceromony;
+        private Event ceromony;
         private Person person;
         private Form form;
         private string selectedEventName;

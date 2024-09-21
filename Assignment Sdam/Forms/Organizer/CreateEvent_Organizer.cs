@@ -15,6 +15,7 @@ namespace Assignment_Sdam
         private string organizer;
         private Person person;
         private Form form;
+        
 
         public string Organizer
         {
@@ -57,12 +58,8 @@ namespace Assignment_Sdam
             decimal Event_participants = EventParticipant_txt.Value;
             DateTime Event_deadline = EventDeadline_txt.Value;
 
-            EventController ceromony= new EventController(Event_name, Event_organizer, Eevnt_location, Event_participants, Event_time,Event_deadline);
-            ceromony.SaveEvent(ceromony);
-
-            OrganizerDashboard o1 = new OrganizerDashboard(person);
-            o1.Show();
-            this.Hide();
+            EventController controller = new EventController(person);
+            controller.SaveEvent(Event_name, Event_organizer, Eevnt_location, Event_participants, Event_time, Event_deadline,this);
 
 
 

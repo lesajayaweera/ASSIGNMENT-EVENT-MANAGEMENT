@@ -15,7 +15,7 @@ namespace Assignment_Sdam.Forms
     {
         private Person person;
         private Form form;
-        private EventController Event;
+        private Event Event;
         private string selected_eventName;
         private int selected_eventId;
         public EditEvents_Organizer(Person person, Form form)

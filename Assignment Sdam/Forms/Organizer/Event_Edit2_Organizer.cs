@@ -14,7 +14,7 @@ namespace Assignment_Sdam.Forms
     {
         private Person person;
         private Form form;
-        private EventController Event;
+        private Event Event;
         private string selected_eventName;
         private int selected_eventId;
         private DataGridView dataGrid;
@@ -61,7 +61,7 @@ namespace Assignment_Sdam.Forms
             decimal Nparticipants = Convert.ToDecimal(Edit_EventParticipant_txt.Value);
 
 
-            EventController ceromony = new EventController(selected_eventId, EventName, EventOrganizer, EventLocation, Nparticipants, Eventtime, EventDeadline);
+            Event ceromony = new Event(selected_eventId, EventName, EventOrganizer, EventLocation, Nparticipants, Eventtime, EventDeadline);
             
             ceromony.UpdateEvent(ceromony);
             OrganizerDashboard o1 = new OrganizerDashboard(person);
