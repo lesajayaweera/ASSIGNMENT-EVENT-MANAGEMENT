@@ -28,8 +28,8 @@ namespace Assignment_Sdam.Forms.Participant
 
         private void UnassignEvents_Load(object sender, EventArgs e)
         {
-            Database db = new Database();
-            db.PopulateEventDataGrid(UnassignEvent_DataGrid_Participant, person);
+            ParticipantController controller = new ParticipantController();
+            controller.DisplayJoinnedEvents(person, UnassignEvent_DataGrid_Participant);
         }
 
         private void HomwEventBtn_UnassignEvents_participant_Click(object sender, EventArgs e)
@@ -56,8 +56,8 @@ namespace Assignment_Sdam.Forms.Participant
 
         private void Unassignbtn_UnassignPage_Click(object sender, EventArgs e)
         {
-            Database database = new Database();
-            database.UnassignUserFromEvent(selected_eventName, selected_eventId, person, UnassignEvent_DataGrid_Participant);
+            ParticipantController controller = new ParticipantController();
+            controller.LeaveEvents( selected_eventId,selected_eventName,  person, UnassignEvent_DataGrid_Participant);
 
         }
 

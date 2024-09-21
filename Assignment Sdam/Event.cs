@@ -114,24 +114,7 @@ namespace Assignment_Sdam
                 return false;
             }
         }
-        public void saveParticipantToDB(int selectedId, string selectedEventName, Person person)
-        {
-            MessageBox.Show(person.Name);
-            Database db = new Database();
-            string tableName = selectedEventName.ToLower().Replace(" ", "").Replace("'", "").Replace("\"", "") + "_" + selectedId.ToString();
-            MessageBox.Show($"the table name :{tableName}");
-            bool tableExists = db.GetSpecificTable(tableName);
-            if (tableExists)
-            {
-                db.SavePersontoEvent(person, tableName);
-                MessageBox.Show($"User added to the {tableName}. ");
-            }
-            else
-            {
-                MessageBox.Show("Error", "user did not added to the table");
-
-            }
-        }
+        
         //---
 
         public void SaveEvent(Event ceremony)

@@ -48,8 +48,8 @@ namespace Assignment_Sdam
             // Update the userGreetingLabel with the user's name
             userGreetingLabel.Text = "Welcome, " + username + "!";
 
-            Database db = new Database();
-            db.PopulateEventDataGrid(dataGridView1, person);
+            ParticipantController controller = new ParticipantController(); 
+            controller.DisplayJoinnedEvents(person, dataGridView1 );
 
 
         }
@@ -93,6 +93,11 @@ namespace Assignment_Sdam
             UnassignEvents u1 = new UnassignEvents(person, this);
             u1.Show();
             this.Hide();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

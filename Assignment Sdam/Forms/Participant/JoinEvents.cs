@@ -77,27 +77,8 @@ namespace Assignment_Sdam.Forms.Participant
 
         private void Joinbtn_JoinPage_Click(object sender, EventArgs e)
         {
-            Database database = new Database();
-            
-            bool hasJoinned = database.HasParticipantAlreadyJoined(Person, selected_Eventname, selected_Id);
-            if (!hasJoinned)
-            {
-                Event e1 = new Event(selected_Id, selected_Eventname);
-                bool isEventFull = database.isFull(e1);
-                if (!isEventFull)
-                {
-                    e1.saveParticipantToDB(selected_Id, selected_Eventname, Person);
-
-                }
-                else
-                {
-                    MessageBox.Show("Event Is All ready Full!","Event Join Error",MessageBoxButtons.OK,MessageBoxIcon.Stop);
-                }
-            }
-            else
-            {
-                MessageBox.Show($"You are already has Joint to the Event({selected_Eventname}) earlier!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            ParticipantController controller = new ParticipantController();
+            controller.JoinEvents(selected_Id, selected_Eventname,Person);
             
         }
 
