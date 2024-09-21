@@ -54,8 +54,6 @@ namespace Assignment_Sdam
             string AdminCode = AdminCodetext.Text;
             string password = PasswordTextRegistration.Text;
 
-
-
             Person person;
 
             if (ParticipantRadioCheck_Register.Checked)
@@ -74,11 +72,8 @@ namespace Assignment_Sdam
             {
                 if (AdminCode == "Admin123")
                 {
-
                     AdminController admin = new AdminController();
                     admin.Register(name, email, TelNo, "Admin", password, this);
-                    //person = new Admin(name, email, TelNo,"Admin", password);
-                    //person.Register(person,this);
                 }
                 else
                 {
@@ -90,8 +85,6 @@ namespace Assignment_Sdam
             {
                 MessageBox.Show("Please select the role!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-
         }
 
         private void Register_Load(object sender, EventArgs e)

@@ -9,18 +9,10 @@ namespace Assignment_Sdam
 {
     internal class Participant : Person
     {
-        public Participant(string name,string email, string phoneNo, string role,string password):base(name,email,phoneNo,role, password)
-        {
-
-        }
-
-        public Participant(string name, string email, string role,string phoneNo):base(name,email,phoneNo) { }
-
+        string connectionString = "Server=127.0.0.1;Database=event_management_system;User ID=root;Password=;";
+        public Participant(string name,string email, string phoneNo, string role,string password):base(name,email,phoneNo,role, password) { }
         public Participant(string name, string password,string role):base(name,password,role) { }
-
         public Participant() { }
-
-
         public override void Register(Person person , Form form)
         {
            
@@ -36,14 +28,10 @@ namespace Assignment_Sdam
                     form.Hide();
                     p1.Show();
                 }
-                
-
             }
         }
-
         public override void Login(Person p1, Form F1)
         {
-            
             bool isAuthenticated = p1.AuthenticateUser(p1);
 
             if (isAuthenticated)
