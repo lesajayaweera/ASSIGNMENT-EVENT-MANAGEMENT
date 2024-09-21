@@ -24,16 +24,24 @@ namespace Assignment_Sdam
             bool isvalidateEventData = Ceromony.ValidateEventData(Ceromony);
             if (isvalidateEventData)
             {
-                
                 Ceromony.SaveEvent(Ceromony);
-                Ceromony.CreateTable(Ceromony);
-                MessageBox.Show("Event SucessFully created!", "Sucess!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                 OrganizerDashboard o1 = new OrganizerDashboard(person);
                 o1.Show();
                 form.Hide();    
-                
             }
+        }
+        public void UpdateEvent(int eventid,string eventname, string organizer, string eventlocation, decimal eventparticipants, DateTime eventtime, DateTime eventdeadline, Form form)
+        {
+            Ceromony = new Event(eventid,eventname, organizer, eventlocation, eventparticipants, eventtime, eventdeadline);
+            bool isvalidateEventData = Ceromony.ValidateEventData(Ceromony);
+            if (isvalidateEventData) 
+            {
+                Ceromony.UpdateEvent(Ceromony);
+                OrganizerDashboard o1 = new OrganizerDashboard(person);
+                o1.Show();
+                form.Hide();
+            }
+
         }
 
 

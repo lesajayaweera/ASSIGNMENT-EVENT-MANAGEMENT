@@ -63,7 +63,7 @@ namespace Assignment_Sdam.Forms
         }
         private void EditEventBtn_EditEvent_Click(object sender, EventArgs e)
         {
-            MessageBox.Show($"Selected event Id ={selected_eventId}  and selected event name = {selected_eventName}");
+            
             if (selected_eventId != 0)
             {
                 Event_Edit2_Organizer e1 = new Event_Edit2_Organizer(person, this, selected_eventId, selected_eventName);
@@ -83,15 +83,11 @@ namespace Assignment_Sdam.Forms
             if (e.RowIndex >= 0)
             {
                 // Get the selected row
-                DataGridViewRow selectedRow = EditEvent_datagrid.Rows[e.RowIndex];
-
-                // Retrieve the EventId (assuming it's stored in a column named "EventId")
-                selected_eventId = Convert.ToInt32(selectedRow.Cells["EventId"].Value);
-
-                // Retrieve the EventName (assuming it's stored in a column named "EventName")
+                DataGridViewRow selectedRow = EditEvent_datagrid.Rows[e.RowIndex];    
+                selected_eventId = Convert.ToInt32(selectedRow.Cells["EventId"].Value);            
                 selected_eventName = selectedRow.Cells["EventName"].Value.ToString();
 
-                MessageBox.Show($"Selected event Id ={selected_eventId}  and selected event name = {selected_eventName}");
+                MessageBox.Show($"Selected event Id ={selected_eventId}  and selected event name = {selected_eventName}", "Event Selected Sucessfully!", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
         }

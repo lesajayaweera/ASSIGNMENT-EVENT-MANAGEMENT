@@ -154,14 +154,7 @@ namespace Assignment_Sdam
 
         //-------------------------------------------------------------Event Class---------------------------------------------------------------------------------------
 
-        // to save the event in the event_table 
         
-
-
-        // to get the event id from the event_table from the database to created a unique table for each event created in the event_table
-        
-        // to display the all the events  in the event_table to the organizer and the participants
-
         public void DisplayAllEvents(DataGridView datagrid)
         {
             
@@ -287,132 +280,11 @@ namespace Assignment_Sdam
 
 
         //=================================================================================================================================================================
-        public void UpdateEvent(Event ceromony)
-        {
-            string Ptablename = getTheTableName(ceromony);
-           
-            string connectionString = "Server=127.0.0.1;Database=event_management_system;User ID=root;Password=;";
-            string query = "UPDATE event_table SET EventName = @EventName, EventLocation = @EventLocation, NParticipants = @NParticipants, Time = @Time, EventDeadline = @EventDeadline WHERE EventId = @EventId";
+        
 
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                conn.Open();
+        
 
-                MySqlCommand cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@EventName", ceromony.EventName);
-                cmd.Parameters.AddWithValue("@EventLocation", ceromony.EventLocation);
-                cmd.Parameters.AddWithValue("@NParticipants", ceromony.NoOfParticipants);
-                cmd.Parameters.AddWithValue("@Time", ceromony.eventtime);
-                cmd.Parameters.AddWithValue("@EventDeadline", ceromony.Deadline);
-                ;
-                cmd.Parameters.AddWithValue("@EventId", ceromony.EventId); // Added this line to include EventId
-
-                
-
-                int rowsAffected = cmd.ExecuteNonQuery(); // Execute the query and get the number of affected rows
-
-                if (rowsAffected > 0)
-                {
-                    MessageBox.Show("Event updated successfully!");
-                    ChangetableName(ceromony, Ptablename);
-                }
-                else
-                {
-                    MessageBox.Show("Event update failed. Please try again.");
-                }
-            }
-        }
-
-        private string GetEventName(int eventId)
-        {
-            string connectionString = "Server=127.0.0.1;Database=event_management_system;User ID=root;Password=;";
-            string query = "SELECT EventName FROM event_table WHERE EventId = @EventId";
-            string eventName = string.Empty;
-
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    conn.Open();
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@EventId", eventId);
-
-                    // Execute the query and get the event name
-                    object result = cmd.ExecuteScalar();
-                    if (result != null)
-                    {
-                        eventName = result.ToString();
-                    }
-                    else
-                    {
-                        MessageBox.Show("No event found with the specified EventId.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("An error occurred while retrieving the event name: " + ex.Message);
-                }
-            }
-
-            return eventName;
-        }
-
-        private void ChangetableName(Event ceremony, string Ptablename)
-        {
-            
-
-            int EventId = ceremony.EventId;
-
-            
-            
-            string newTableName = ceremony.EventName.Replace(" ", "").ToLower() + "_" + EventId.ToString();
-            MessageBox.Show(newTableName);
-
-
-            string connectionString = "Server=127.0.0.1;Database=event_management_system;User ID=root;Password=;";
-
-            using (var connection = new MySqlConnection(connectionString))
-            {
-                connection.Open();
-
-                // Check if the table exists
-                var checkCommand = new MySqlCommand(
-                    "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = @database AND table_name = @tableName;",
-                    connection);
-                checkCommand.Parameters.AddWithValue("@database", "event_management_system");
-                checkCommand.Parameters.AddWithValue("@tableName", Ptablename);
-
-                int tableCount = Convert.ToInt32(checkCommand.ExecuteScalar());
-
-                if (tableCount > 0)
-                {
-                    // Table exists, proceed to rename it
-                    var renameCommand = new MySqlCommand(
-                        "RENAME TABLE " + Ptablename + " TO " + newTableName + ";",
-                        connection);
-
-                    try
-                    {
-                        renameCommand.ExecuteNonQuery();
-                        MessageBox.Show($"{Ptablename} has been renamed to {newTableName}.");
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error renaming table: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Table does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-        private string getTheTableName (Event ceromony)
-        {
-            string PeventName = GetEventName(ceromony.EventId);
-
-            return PeventName.Replace(" ", "").ToLower() + "_" + ceromony.EventId.ToString();
-        }
+        
 
         private int GetParticipantId(Person person)
         {

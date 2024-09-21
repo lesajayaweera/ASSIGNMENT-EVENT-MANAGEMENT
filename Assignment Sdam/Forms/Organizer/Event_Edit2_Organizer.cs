@@ -60,14 +60,12 @@ namespace Assignment_Sdam.Forms
             DateTime EventDeadline = Edit_EventDeadline_txt.Value;
             decimal Nparticipants = Convert.ToDecimal(Edit_EventParticipant_txt.Value);
 
+            EventController controller = new EventController(person);
 
-            Event ceromony = new Event(selected_eventId, EventName, EventOrganizer, EventLocation, Nparticipants, Eventtime, EventDeadline);
+
+            controller.UpdateEvent(selected_eventId, EventName, EventOrganizer, EventLocation, Nparticipants, Eventtime, EventDeadline,this);
             
-            ceromony.UpdateEvent(ceromony);
-            OrganizerDashboard o1 = new OrganizerDashboard(person);
-            o1.Show();
-            this.Hide();
-
+            
         }
 
         private void DeleteBtn_Edit_Click(object sender, EventArgs e)
