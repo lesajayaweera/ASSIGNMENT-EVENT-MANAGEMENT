@@ -66,16 +66,17 @@ namespace Assignment_Sdam
             }
             else if (Role == "Organizer")
             {
-                Person p1 = new Organizer(Username, Password, Role);
-                p1.Login(p1, this);
+                OrganizerController organizer = new OrganizerController();
+                MessageBox.Show("hello");
+                organizer.Login(Username, Password,Role,this);
+               
             }
             else if (Role == "Participant")
             {
-                Person p1 = new Participant(Username, Password, Role);
-                p1.Login(p1, this);
-                //ParticipantDashboard p1 = new ParticipantDashboard(Username,Role);
-                //p1.Show();
-                //this.Hide();
+                ParticipantController participant = new ParticipantController();
+                MessageBox.Show("hello");
+
+                participant.Login(Username, Password, Role, this);
             }
             else
             {

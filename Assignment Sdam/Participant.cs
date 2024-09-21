@@ -16,21 +16,21 @@ namespace Assignment_Sdam
 
         public Participant(string name, string email, string role,string phoneNo):base(name,email,phoneNo) { }
 
-        public Participant(string name, string email,string phoneNo):base(name,email,phoneNo) { }
+        public Participant(string name, string password,string role):base(name,password,role) { }
 
         public Participant() { }
 
 
         public override void Register(Person person , Form form)
         {
-            Database database = new Database();
+           
             bool isValidated = person.ValidateData();
-            bool iscredentialtaken = database.CredentialsExist(person);
+            bool iscredentialtaken = person.CredentialsExist(person);
             if (isValidated) 
             {
                 if (!iscredentialtaken) 
                 {
-                    database.SaveData(person);
+                    person.SaveData(person);
                     MessageBox.Show("Account Creation was sucessful!", "Sucessful", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ParticipantDashboard p1 = new ParticipantDashboard(person, form);
                     form.Hide();
@@ -43,8 +43,8 @@ namespace Assignment_Sdam
 
         public override void Login(Person p1, Form F1)
         {
-            Database d1 = new Database();
-            bool isAuthenticated = d1.AuthenticateUser(p1);
+            
+            bool isAuthenticated = p1.AuthenticateUser(p1);
 
             if (isAuthenticated)
             {
@@ -55,7 +55,8 @@ namespace Assignment_Sdam
             }
             else
             {
-                MessageBox.Show("Error");
+                MessageBox.Show("Logged in Failed!", "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
             }
         }
     }

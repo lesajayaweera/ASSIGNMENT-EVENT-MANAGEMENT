@@ -233,8 +233,8 @@ namespace Assignment_Sdam
                 }
             }
         }
-        // to check whether the user entered data exists in the database in register form
 
+        // to check whether the user entered data exists in the database in register form
         public bool CredentialsExist(Person person)
         {
             string query = "SELECT COUNT(*) FROM user_table WHERE name = @Username OR email = @Email";
@@ -246,14 +246,14 @@ namespace Assignment_Sdam
                     connection.Open();
                     using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
-                        // Add parameters to the command
+                        
                         command.Parameters.AddWithValue("@Username", person.Name);
                         command.Parameters.AddWithValue("@Email", person.Email);
 
-                        // Execute the scalar query to get the count
+                        
                         int userCount = Convert.ToInt32(command.ExecuteScalar());
 
-                        // If count > 0, either username or email exists
+                        
                         if (userCount > 0)
                         {
                             MessageBox.Show("The email or Username is already registered. Please try another.", "Duplicate Credentials", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -272,11 +272,7 @@ namespace Assignment_Sdam
                 }
                 finally
                 {
-                    // Ensure connection is closed
-                    if (connection.State == ConnectionState.Open)
-                    {
-                        connection.Close();
-                    }
+                    connection.Close(); 
                 }
             }
         }
