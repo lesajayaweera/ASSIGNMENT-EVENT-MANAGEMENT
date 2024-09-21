@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,8 +10,10 @@ namespace Assignment_Sdam
 {
     internal  class Organizer : Person 
     {
-        
+        string connectionString = "Server=127.0.0.1;Database=event_management_system;User ID=root;Password=;";
 
+
+        public Organizer() { }
         public Organizer(string name, string email, string phoneNo,string role,string password) : base(name, email, phoneNo,role, password)
         {
             
@@ -54,6 +58,37 @@ namespace Assignment_Sdam
 
             }
         }
+        public void LoadOrganizerMadeEvents(DataGridView data, Person person)
+        {
+
+
+            string query = $"SELECT * FROM event_table WHERE EventOrganizer = '{person.Name}' ORDER BY EventOrganizer";
+            DataTable dataTable = new DataTable();
+
+            try
+            {
+
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+
+                    connection.Open();
+
+
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(query, connection))
+                    {
+                        // Fill the DataTable with the data fetched
+                        adapter.Fill(dataTable);
+                    }
+
+                    // Bind the DataTable to the DataGridView
+                    data.DataSource = dataTable;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
 
 
 
@@ -63,7 +98,7 @@ namespace Assignment_Sdam
 
 
 
-        
+
 
 
     }

@@ -28,8 +28,8 @@ namespace Assignment_Sdam.Forms.Admin
         private void UserManagement_Load(object sender, EventArgs e)
         {
             UsernameLabel_EventManagement.Text = $"Hi ! {person.Name},";
-            Database d1 = new Database();
-            d1.DisplayAllUser(dataGridView_Usermanagement);
+            AdminController controller = new AdminController();
+            controller.ViewUserTable(dataGridView_Usermanagement);
         }
 
         private void Home_UserManagement_Click(object sender, EventArgs e)
@@ -87,26 +87,8 @@ namespace Assignment_Sdam.Forms.Admin
 
         private void DeleteUser_UserManagement_Click(object sender, EventArgs e)
         {
-            if (selected_UserId != 0)
-            {
-                
-                if (selected_role == "Organizer")
-                {
-                    Database database = new Database();
-                    database.DeleteOrganizerAndEvents(selected_Username);
-                    database.DisplayAllUser(dataGridView_Usermanagement);
-                }
-                else
-                {
-                    Database d1 = new Database();
-                    d1.DeleteUser(dataGridView_Usermanagement, selected_UserId);
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please Select an event to Veiw Details!", "Select an Event", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            }
+            AdminController adminController = new AdminController();
+            adminController.DeleteUsers(selected_Username, selected_role, selected_UserId, dataGridView_Usermanagement);
         }
     }
 }

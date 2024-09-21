@@ -374,8 +374,6 @@ namespace Assignment_Sdam
             return eventName;
         }
 
-
-
         public void DisplayAllEvents(DataGridView datagrid)
         {
 
@@ -409,11 +407,160 @@ namespace Assignment_Sdam
             }
         }
 
+        public void deleteEventAndTable(string eventName, int eventId)
+        {
+
+            string tableName = eventName.ToLower().Replace(" ", "").Replace("'", "").Replace("\"", "") + "_" + eventId.ToString();
+            
+
+            string connectionString = "Server=127.0.0.1;Database=event_management_system;User ID=root;Password=;";
+            string deleteEventQuery = "DELETE FROM event_table WHERE EventId = @EventId";
 
 
+            string dropTableQuery = $"DROP TABLE IF EXISTS `{tableName}`";
+
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
 
 
+                    using (MySqlTransaction transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
 
+                            using (MySqlCommand deleteEventCommand = new MySqlCommand(deleteEventQuery, connection, transaction))
+                            {
+                                deleteEventCommand.Parameters.AddWithValue("@EventId", eventId);
+                                deleteEventCommand.ExecuteNonQuery();
+                            }
+
+                            // Drop the corresponding event table
+                            using (MySqlCommand dropTableCommand = new MySqlCommand(dropTableQuery, connection, transaction))
+                            {
+                                dropTableCommand.ExecuteNonQuery();
+                            }
+
+                            // Commit the transaction if both commands succeed
+                            transaction.Commit();
+                            MessageBox.Show("Event deleted and table dropped successfully.");
+                        }
+                        catch (Exception ex)
+                        {
+                            // Rollback the transaction if anything goes wrong
+                            transaction.Rollback();
+                            MessageBox.Show("Error during transaction: " + ex.Message);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error connecting to database: " + ex.Message);
+            }
+        }
+        public Event loadEventData(int selectedEventId, string selectedEventName)
+        {
+            Event eventData = null; // Create a null Event object initially
+            string query = "SELECT EventId, EventName,EventOrganizer,EventLocation ,Time FROM event_table WHERE EventId = @EventId AND EventName = @EventName";
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@EventId", selectedEventId);
+                cmd.Parameters.AddWithValue("@EventName", selectedEventName);
+
+                conn.Open();
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        // Populate the Event object with data from the database
+                        eventData = new Event
+                        {
+                            EventId = reader.GetInt32("EventId"),
+                            Organizer = reader.GetString("EventOrganizer"),
+                            EventName = reader.GetString("EventName"),
+                            eventtime = reader.GetDateTime("Time"),
+                            EventLocation = reader.GetString("EventLocation")
+                            // Set other properties as needed
+                        };
+                    }
+                }
+            }
+
+            return eventData; // Return the populated Event object or null if not found
+        }
+
+        public void DisplayRelaventTable(int selectedEventId, string selectedEventName, DataGridView datagrid)
+        {
+            string tableName = $"{selectedEventName.ToLower().Replace(" ", "").Replace("'", "").Replace("\"", "")}_{selectedEventId}";
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    // Open the connection
+                    connection.Open();
+
+                    // Define the query to retrieve data
+                    string query = $"SELECT * FROM {tableName}";
+
+                    // Create a MySqlDataAdapter
+                    MySqlDataAdapter dataAdapter = new MySqlDataAdapter(query, connection);
+
+                    // Create a DataTable to hold the data
+                    DataTable dataTable = new DataTable();
+
+                    // Fill the DataTable with data
+                    dataAdapter.Fill(dataTable);
+
+                    // Bind the DataTable to the DataGridView
+                    datagrid.DataSource = dataTable;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+
+
+        }
+
+        public void KickUser(int selectedEventId, string selectedEventName, int selectedUserId, string selectedUsername, DataGridView datagrid)
+        {
+            string tableName = $"{selectedEventName.ToLower().Replace(" ", "").Replace("'", "").Replace("\"", "")}_{selectedEventId}";
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string deleteQuery = $"DELETE FROM {tableName} WHERE UserTable_ID = @UserId";
+                    using (MySqlCommand delete = new MySqlCommand(deleteQuery, connection))
+                    {
+                        delete.Parameters.AddWithValue("@UserId", selectedUserId);
+                        delete.ExecuteNonQuery();
+                    }
+                    MessageBox.Show("You sucessfully UnAssigned the Event!", "Sucess!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                }
+                finally
+                {
+                    connection.Close();
+                    DisplayRelaventTable(selectedEventId, selectedEventName, datagrid);
+
+
+                }
+            }
+
+
+        }
+        
     }
 }
 

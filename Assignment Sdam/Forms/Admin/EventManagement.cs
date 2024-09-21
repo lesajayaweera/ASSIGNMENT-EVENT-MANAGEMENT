@@ -97,10 +97,8 @@ namespace Assignment_Sdam.Forms.Admin
                 DialogResult check = MessageBox.Show($"Do you  want to delete the event:{selected_eventName}?", "Delete Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (check == DialogResult.Yes)
                 {
-                    Database d1 = new Database();
-                    d1.deleteEventAndTable(selected_eventName, selected_eventId);
-                    EventController e1 = new EventController(person);
-                    e1.DisplayEvent(dataGridView_Eventmanagement);
+                    AdminController controller = new AdminController();
+                    controller.DeleteEvent(selected_eventName, selected_eventId, dataGridView_Eventmanagement);
                 }
             }
             else

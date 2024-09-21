@@ -8,7 +8,7 @@ namespace Assignment_Sdam
 {
     internal class OrganizerController
     {
-        private Organizer organizer;
+        private Organizer organizer = new Organizer();
 
         public OrganizerController() { }
 
@@ -23,7 +23,17 @@ namespace Assignment_Sdam
             Person organizer = new Organizer(name,email,phoneNo,role,password);
             organizer.Register(organizer,form);
         }
+        public void DisplayCreatedEvents(DataGridView datagrid, Person person)
+        {
+            organizer.LoadOrganizerMadeEvents(datagrid, person);
+        }
 
+        public void DeleteCreatedEvent(DataGridView datagrid, Person person, string eventName, int eventId)
+        {
+            EventController controller = new EventController(person);
+            controller.DeleteEvents(eventName, eventId);
+            organizer.LoadOrganizerMadeEvents(datagrid, person);
+        }
 
     }
 }

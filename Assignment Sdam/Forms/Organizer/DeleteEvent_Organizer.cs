@@ -40,8 +40,8 @@ namespace Assignment_Sdam.Forms
 
         private void DeleteEvent_Organizer_Load(object sender, EventArgs e)
         {
-            Database d1 = new Database();
-            d1.LoadOrganizerMadeEvents(dataGrid_DeleteEvent, person);
+            OrganizerController controller = new OrganizerController();
+            controller.DisplayCreatedEvents(dataGrid_DeleteEvent, person);
         }
 
         private void BAckBtn_Click(object sender, EventArgs e)
@@ -75,7 +75,7 @@ namespace Assignment_Sdam.Forms
                 // Retrieve the EventName (assuming it's stored in a column named "EventName")
                 selected_eventName = selectedRow.Cells["EventName"].Value.ToString();
 
-                MessageBox.Show($"Selected event Id ={selected_eventId}  and selected event name = {selected_eventName}");
+                MessageBox.Show($"Selected event Id ={selected_eventId}  and selected event name = {selected_eventName}","Selected Event Details",MessageBoxButtons.OK,MessageBoxIcon.Information);
 
             }
         }
@@ -85,9 +85,9 @@ namespace Assignment_Sdam.Forms
             DialogResult check = MessageBox.Show($"do you want to delete the  {selected_eventName} ?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (check == DialogResult.Yes)
             {
-                Database d1 = new Database();
-                d1.deleteEventAndTable(selected_eventName, selected_eventId);
-                d1.LoadOrganizerMadeEvents(dataGrid_DeleteEvent, person);
+                OrganizerController controller = new OrganizerController();
+                
+                controller.DeleteCreatedEvent(dataGrid_DeleteEvent, person, selected_eventName, selected_eventId);
             }
         }
 

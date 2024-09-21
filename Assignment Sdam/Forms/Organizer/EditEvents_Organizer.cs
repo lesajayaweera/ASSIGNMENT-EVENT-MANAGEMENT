@@ -28,8 +28,8 @@ namespace Assignment_Sdam.Forms
 
         private void EditEvents_Organizer_Load(object sender, EventArgs e)
         {
-            Database d1 = new Database();
-            d1.LoadOrganizerMadeEvents(EditEvent_datagrid, person);
+            OrganizerController controller = new OrganizerController();
+            controller.DisplayCreatedEvents(EditEvent_datagrid, person);
         }
 
         private void EventEdit_DashBoardBtn_Click(object sender, EventArgs e)

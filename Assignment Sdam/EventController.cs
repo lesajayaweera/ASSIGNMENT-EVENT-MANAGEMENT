@@ -9,9 +9,10 @@ namespace Assignment_Sdam
     internal class EventController
     {
         string connectionString = "Server=127.0.0.1;Database=event_management_system;User ID=root;Password=;";
-        private Event Ceromony;
+        private Event Ceromony = new Event();
         private Person person;
 
+        public EventController() { }
         public EventController(Person person)
         {
             this.person = person;
@@ -45,12 +46,28 @@ namespace Assignment_Sdam
         }
         public void DisplayEvent(DataGridView data)
         {
-            Event ceromony = new Event();
-            ceromony.DisplayAllEvents(data);
+
+            Ceromony.DisplayAllEvents(data);
+        }
+        public void DeleteEvents(string EventName, int EventId)
+        {
+            Ceromony.deleteEventAndTable(EventName, EventId);
         }
 
+        public void DisplayRelaventTable(int selectedEventId, string selectedEventName, DataGridView datagrid)
+        {
+            Ceromony.DisplayRelaventTable(selectedEventId, selectedEventName, datagrid);
+        }
+        public Event LoadEvents(int selectedEventId, string selectedEventName)
+        {
+            Event EventData=Ceromony.loadEventData(selectedEventId, selectedEventName); 
+            return EventData;
+        }
 
-
+        public void KickUser(int selectedEventId, string selectedEventName, int selectedUserId, string selectedUsername, DataGridView datagrid)
+        {
+            Ceromony.KickUser(selectedEventId, selectedEventName, selectedUserId, selectedUsername, datagrid);
+        }
 
     }
 }

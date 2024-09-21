@@ -161,6 +161,7 @@
             ViewEventDetailBtn_VeiwEvent.TabIndex = 11;
             ViewEventDetailBtn_VeiwEvent.Text = "View Event Details";
             ViewEventDetailBtn_VeiwEvent.UseVisualStyleBackColor = false;
+            ViewEventDetailBtn_VeiwEvent.Click += ViewEventDetailBtn_VeiwEvent_Click;
             // 
             // label2
             // 
@@ -168,9 +169,9 @@
             label2.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold | FontStyle.Italic);
             label2.Location = new Point(327, 44);
             label2.Name = "label2";
-            label2.Size = new Size(173, 31);
+            label2.Size = new Size(296, 31);
             label2.TabIndex = 10;
-            label2.Text = "Veiw All Events";
+            label2.Text = "Veiw Created Event Details";
             // 
             // VeiwEvent_DataGrid
             // 

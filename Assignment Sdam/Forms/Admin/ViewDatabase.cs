@@ -26,9 +26,11 @@ namespace Assignment_Sdam.Forms.Admin
         private void ViewDatabase_Load(object sender, EventArgs e)
         {
             UsernameLabel_ViewDatabase.Text= $"Hi ! {person.Name},";
-             EventController e1 = new EventController(person);
+            EventController e1 = new EventController(person);
             e1.DisplayEvent(dataGridView_Events);
-            e1.DisplayEvent(dataGridView_User);
+
+            AdminController controller = new AdminController();
+            controller.ViewUserTable(dataGridView_User);
 
         }
 

@@ -34,9 +34,9 @@ namespace Assignment_Sdam.Forms.Admin
 
         private void EventDetails_Load(object sender, EventArgs e)
         {
-            Database d1 = new Database();
-            d1.DisplayRelaventTable(selectedEventID, selectedEventName, dataGridView_VeiwEventDetail);
-            ceromony = d1.loadEventData(selectedEventID, selectedEventName);
+            EventController e1 = new EventController();
+            e1.DisplayRelaventTable(selectedEventID, selectedEventName, dataGridView_VeiwEventDetail);
+            ceromony = e1.LoadEvents(selectedEventID, selectedEventName);
 
             EventName_label.Text = $"Event Name:\n{ceromony.EventName}";
             EventOrganizerLabel.Text = $"Event Organizer: \n{ceromony.Organizer}";
@@ -63,23 +63,15 @@ namespace Assignment_Sdam.Forms.Admin
 
                 selected_UserName = selectedRow.Cells["name"].Value.ToString();
 
-                MessageBox.Show($"Selected event Id ={selected_UserName}  and selected event name = {selected_UserId}");
+                MessageBox.Show($"Selected event Id ={selected_UserName}  and selected event name = {selected_UserId}","Event Selection",MessageBoxButtons.OK,MessageBoxIcon.Information);
 
             }
         }
 
         private void KickUserBtn_Click(object sender, EventArgs e)
         {
-            if(selected_UserId != 0)
-            {
-                Database d1 = new Database();
-                d1.KickUser(selectedEventID, selectedEventName, selected_UserId, selected_UserName, dataGridView_VeiwEventDetail);
-            }
-            else
-            {
-                MessageBox.Show("Please Select an event to Veiw Details!", "Select an Event", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            }
+            AdminController controller = new AdminController();
+            controller.KickUserFromEvent(selectedEventID, selectedEventName, selected_UserId, selected_UserName, dataGridView_VeiwEventDetail);
         }
     }
 }

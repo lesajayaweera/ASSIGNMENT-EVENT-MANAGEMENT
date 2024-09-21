@@ -27,8 +27,8 @@ namespace Assignment_Sdam.Forms.Organizer
 
         private void ViewEventsOrganizer_Load(object sender, EventArgs e)
         {
-            Database db = new Database();
-            db.LoadOrganizerMadeEvents(VeiwEvent_DataGrid,person);
+            OrganizerController controller = new OrganizerController();
+            controller.DisplayCreatedEvents(VeiwEvent_DataGrid, person);
         }
 
         private void HomeDashboardbtn_Veiw_Events_Click(object sender, EventArgs e)
@@ -57,10 +57,17 @@ namespace Assignment_Sdam.Forms.Organizer
 
         private void EditbtnViewEventO_Click(object sender, EventArgs e)
         {
-            EditEvents_Organizer e1 = new EditEvents_Organizer(person,this);
+            EditEvents_Organizer e1 = new EditEvents_Organizer(person, this);
             e1.Show();
             this.Hide();
 
+        }
+
+        private void ViewEventDetailBtn_VeiwEvent_Click(object sender, EventArgs e)
+        {
+            ViewEventDetails v1 = new ViewEventDetails(person, this);
+            v1.Show();
+            this.Hide();
         }
     }
 }
