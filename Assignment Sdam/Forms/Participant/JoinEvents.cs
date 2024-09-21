@@ -17,7 +17,7 @@ namespace Assignment_Sdam.Forms.Participant
         private Form form;
         private int selected_Id;
         private string selected_Eventname;
-
+        
         public JoinEvents(Person person, Form form)
         {
             InitializeComponent();
@@ -27,8 +27,9 @@ namespace Assignment_Sdam.Forms.Participant
 
         private void JoinEvents_Load(object sender, EventArgs e)
         {
-            Database db = new Database();
-            db.DisplayAllEvents(JoinEvent_DataGrid_Participant);
+            EventController e1 = new EventController(Person);
+
+            e1.DisplayEvent(JoinEvent_DataGrid_Participant);
         }
 
         private void HomeDashboardbtn_Join_Events_Click(object sender, EventArgs e)

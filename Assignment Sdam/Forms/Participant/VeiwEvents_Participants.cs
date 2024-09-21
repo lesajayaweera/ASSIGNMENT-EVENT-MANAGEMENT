@@ -14,6 +14,7 @@ namespace Assignment_Sdam.Forms.Participant
     {
         private Person person;
         private Form form;
+        private EventController e1;
 
         public VeiwEvents_Participants(Person person, Form form)
         {
@@ -24,8 +25,8 @@ namespace Assignment_Sdam.Forms.Participant
 
         private void VeiwEvents_Participants_Load(object sender, EventArgs e)
         {
-            Database db = new Database();
-            db.DisplayAllEvents(VeiwEvent_DataGrid_Participant);
+            EventController e1 = new EventController(person);
+            e1.DisplayEvent(VeiwEvent_DataGrid_Participant);
         }
 
         private void HomeDashboardbtn_Veiw_Events_Click(object sender, EventArgs e)

@@ -18,6 +18,7 @@ namespace Assignment_Sdam.Forms.Admin
         private string username;
         private int selected_eventId;
         private string selected_eventName;
+        
 
         public EventManagement(Person person, Form form)
         {
@@ -26,13 +27,14 @@ namespace Assignment_Sdam.Forms.Admin
             this.form = form;
             this.username = person.Name;
         }
+        
 
         private void EventManagement_Load(object sender, EventArgs e)
         {
             UsernameLabel_EventManagement.Text = $"Hi ! {username},";
             //dataGridView_Eventmanagement
-            Database d1 = new Database();
-            d1.DisplayAllEvents(dataGridView_Eventmanagement);
+             EventController e1 = new EventController(person);
+             e1.DisplayEvent(dataGridView_Eventmanagement);
         }
 
         private void Home_EventManagement_Click(object sender, EventArgs e)
@@ -97,7 +99,8 @@ namespace Assignment_Sdam.Forms.Admin
                 {
                     Database d1 = new Database();
                     d1.deleteEventAndTable(selected_eventName, selected_eventId);
-                    d1.DisplayAllEvents(dataGridView_Eventmanagement);
+                    EventController e1 = new EventController(person);
+                    e1.DisplayEvent(dataGridView_Eventmanagement);
                 }
             }
             else

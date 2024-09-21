@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -113,19 +114,6 @@ namespace Assignment_Sdam
                 return false;
             }
         }
-        
-
-        //public void UpdateEvent(Event ceromony)
-        //{
-        //    bool isDataValidated = ValidateEventData(ceromony);
-        //    if (isDataValidated)
-        //    {
-        //        Database db = new Database();
-        //        db.UpdateEvent(ceromony);
-        //    }
-        //}
-
-
         public void saveParticipantToDB(int selectedId, string selectedEventName, Person person)
         {
             MessageBox.Show(person.Name);
@@ -403,6 +391,40 @@ namespace Assignment_Sdam
             return eventName;
         }
 
+
+
+        public void DisplayAllEvents(DataGridView datagrid)
+        {
+
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+
+                    connection.Open();
+
+
+                    string query = "SELECT * FROM event_table";
+
+
+                    MySqlDataAdapter dataAdapter = new MySqlDataAdapter(query, connection);
+
+
+                    DataTable dataTable = new DataTable();
+
+
+                    dataAdapter.Fill(dataTable);
+
+
+                    datagrid.DataSource = dataTable;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+        }
 
 
 

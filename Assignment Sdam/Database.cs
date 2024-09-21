@@ -16,177 +16,13 @@ namespace Assignment_Sdam
         string connectionString = "Server=127.0.0.1;Database=event_management_system;User ID=root;Password=;";
 
         // to save the person data to the database under the user_table 
-        public void SaveData(Person person)
-        {
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-
-                    string query = "INSERT INTO user_table (name, password, email, phonenumber, role) " +
-                                   "VALUES (@name, @password, @email, @phoneNumber, @role)";
-
-                    using (MySqlCommand command = new MySqlCommand(query, connection))
-                    {
-                        // Check if any required field is null or empty (optional validation)
-                        if (string.IsNullOrEmpty(person.Name) || string.IsNullOrEmpty(person.Password) ||
-                            string.IsNullOrEmpty(person.Email) || string.IsNullOrEmpty(person.PhoneNo) ||
-                            string.IsNullOrEmpty(person.Role))
-                        {
-                            MessageBox.Show("Please fill in all fields before saving.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
-                        }
-
-                        // Add parameters to the command
-                        command.Parameters.AddWithValue("@name", person.Name);
-                        command.Parameters.AddWithValue("@password", person.Password); // Ensure Password exists in Person class
-                        command.Parameters.AddWithValue("@email", person.Email);
-                        command.Parameters.AddWithValue("@phoneNumber", person.PhoneNo); // Adjust to your database field if necessary
-                        command.Parameters.AddWithValue("@role", person.Role);
-
-                        // Execute query and show rows affected
-                        int rowsAffected = command.ExecuteNonQuery();
-                        Console.WriteLine("Rows affected: " + rowsAffected);
-                    }
-                }
-                catch (MySqlException ex)
-                {
-                    MessageBox.Show("Database error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-        }
-
-
-        // to check whether the user entered the validated data based on the Database and table user_table
-        public bool AuthenticateUser(Person person)
-        {
-            string connectionString = "Server=127.0.0.1;Database=event_management_system;User ID=root;Password=;";
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    string query = "SELECT COUNT(*) FROM user_table WHERE name = @username AND password = @password AND role = @role";
-                    using (MySqlCommand command = new MySqlCommand(query, connection))
-                    {
-                        command.Parameters.AddWithValue("@username", person.Name);
-                        command.Parameters.AddWithValue("@password", person.Password);
-                        command.Parameters.AddWithValue("@role", person.Role);
-
-                        int countUser = Convert.ToInt32(command.ExecuteScalar());
-                        return countUser > 0;
-                    }
-                }
-                catch (MySqlException ex)
-                {
-                    MessageBox.Show("Database error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return false;
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-        }
-        // to check whether the user entered data exists in the database in register form
-
-        public bool CredentialsExist(Person person)
-        {
-            string query = "SELECT COUNT(*) FROM user_table WHERE name = @Username OR email = @Email";
-
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    using (MySqlCommand command = new MySqlCommand(query, connection))
-                    {
-                        // Add parameters to the command
-                        command.Parameters.AddWithValue("@Username", person.Name);
-                        command.Parameters.AddWithValue("@Email", person.Email);
-
-                        // Execute the scalar query to get the count
-                        int userCount = Convert.ToInt32(command.ExecuteScalar());
-
-                        // If count > 0, either username or email exists
-                        if (userCount > 0)
-                        {
-                            MessageBox.Show("The email or Username is already registered. Please try another.", "Duplicate Credentials", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                }
-                catch (MySqlException ex)
-                {
-                    MessageBox.Show("An error occurred while checking the credentials: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return false;
-                }
-                finally
-                {
-                    // Ensure connection is closed
-                    if (connection.State == ConnectionState.Open)
-                    {
-                        connection.Close();
-                    }
-                }
-            }
-        }
-
+        
         
 
         //-------------------------------------------------------------Event Class---------------------------------------------------------------------------------------
 
         
-        public void DisplayAllEvents(DataGridView datagrid)
-        {
-            
-            
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    
-                    connection.Open();
-
-                    
-                    string query = "SELECT * FROM event_table";
-
-                   
-                    MySqlDataAdapter dataAdapter = new MySqlDataAdapter(query, connection);
-
-                    
-                    DataTable dataTable = new DataTable();
-
-                    
-                    dataAdapter.Fill(dataTable);
-
-                    
-                    datagrid.DataSource = dataTable;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-            }
-        }
+       
 
         public void deleteEventAndTable(string eventName, int eventId)
         {
@@ -247,7 +83,7 @@ namespace Assignment_Sdam
         public void LoadOrganizerMadeEvents(DataGridView data, Person person)
         {
             
-            string connectionString = "Server=127.0.0.1;Database=event_management_system;User ID=root;Password=;";
+            
             string query = $"SELECT * FROM event_table WHERE EventOrganizer = '{person.Name}' ORDER BY EventOrganizer";
             DataTable dataTable = new DataTable();
 
@@ -424,77 +260,90 @@ namespace Assignment_Sdam
         //----------------------------------------------------------------------------
 
 
-       
-        public void PopulateEventDataGrid(DataGridView datagrid,Person person)
+
+        public void PopulateEventDataGrid(DataGridView datagrid, Person person)
         {
             int userId = GetParticipantId(person);
 
+            if (userId == -1)
+            {
+                MessageBox.Show("Invalid participant ID.");
+                return;
+            }
+
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                
-                connection.Open();
-
-                // Create a DataTable to hold the event data
-                DataTable eventTable = new DataTable();
-
-                // Add columns to the DataTable
-                eventTable.Columns.Add("EventName", typeof(string));
-                eventTable.Columns.Add("EventId", typeof(int));
-                eventTable.Columns.Add("EventLocation", typeof(string));
-                eventTable.Columns.Add("Time", typeof(DateTime));
-                eventTable.Columns.Add("EventOrganizer", typeof(string));
-
-                // Query to get event names, IDs, location, time, and organizer from the event_table
-                string query = "SELECT EventName, EventId, EventLocation, Time, EventOrganizer FROM event_table";
-
-                // Store events temporarily
-                List<(string eventName, int eventId, string eventLocation, DateTime eventTime, string eventOrganizer)> eventList
-                    = new List<(string, int, string, DateTime, string)>();
-
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                try
                 {
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        // Iterate through each event and store it in the list
-                        while (reader.Read())
-                        {
-                            string eventName = reader["EventName"].ToString();
-                            int eventId = Convert.ToInt32(reader["EventId"]);
-                            string eventLocation = reader["EventLocation"].ToString();
-                            DateTime eventTime = Convert.ToDateTime(reader["Time"]);
-                            string eventOrganizer = reader["EventOrganizer"].ToString();
+                    connection.Open();
 
-                            eventList.Add((eventName, eventId, eventLocation, eventTime, eventOrganizer));
+                    // Create a DataTable to hold the event data
+                    DataTable eventTable = new DataTable();
+
+                    // Add columns to the DataTable
+                    eventTable.Columns.Add("EventName", typeof(string));
+                    eventTable.Columns.Add("EventId", typeof(int));
+                    eventTable.Columns.Add("EventLocation", typeof(string));
+                    eventTable.Columns.Add("Time", typeof(DateTime));
+                    eventTable.Columns.Add("EventOrganizer", typeof(string));
+
+                    // Query to get event names, IDs, location, time, and organizer from the event_table
+                    string query = "SELECT EventName, EventId, EventLocation, Time, EventOrganizer FROM event_table";
+
+                    // Store events temporarily
+                    List<(string eventName, int eventId, string eventLocation, DateTime eventTime, string eventOrganizer)> eventList
+                        = new List<(string, int, string, DateTime, string)>();
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            // Iterate through each event and store it in the list
+                            while (reader.Read())
+                            {
+                                string eventName = reader["EventName"].ToString();
+                                int eventId = Convert.ToInt32(reader["EventId"]);
+                                string eventLocation = reader["EventLocation"].ToString();
+                                DateTime eventTime = Convert.ToDateTime(reader["Time"]);
+                                string eventOrganizer = reader["EventOrganizer"].ToString();
+
+                                eventList.Add((eventName, eventId, eventLocation, eventTime, eventOrganizer));
+                            }
                         }
                     }
-                }
 
-                //  check for user participation in each event table
-                foreach (var eventData in eventList)
-                {
-                    string eventTableName = $"{eventData.eventName.ToLower().Replace(" ", "").Replace("'", "").Replace("\"", "")}_{eventData.eventId}";
-                    string checkUserQuery = $"SELECT 1 FROM {eventTableName} WHERE UserTable_ID = @UserId";
-
-                    using (MySqlCommand userCmd = new MySqlCommand(checkUserQuery, connection))
+                    // Check for user participation in each event table
+                    foreach (var eventData in eventList)
                     {
-                        userCmd.Parameters.AddWithValue("@UserId", userId);
-                        var result = userCmd.ExecuteScalar();
+                        string eventTableName = $"`{eventData.eventName.ToLower().Replace(" ", "").Replace("'", "").Replace("\"", "")}_{eventData.eventId}`";
+                        string checkUserQuery = $"SELECT 1 FROM {eventTableName} WHERE UserTable_ID = @UserId";
 
-                        if (result != null) // User is part of this event
+                        using (MySqlCommand userCmd = new MySqlCommand(checkUserQuery, connection))
                         {
-                            // Add the event data to the DataTable
-                            eventTable.Rows.Add(eventData.eventName, eventData.eventId, eventData.eventLocation, eventData.eventTime, eventData.eventOrganizer);
-                        }
+                            userCmd.Parameters.AddWithValue("@UserId", userId);
+                            var result = userCmd.ExecuteScalar();
+
+                            if (result != null) // User is part of this event
+                            {
+                                // Add the event data to the DataTable
+                                eventTable.Rows.Add(eventData.eventName, eventData.eventId, eventData.eventLocation, eventData.eventTime, eventData.eventOrganizer);
+                            }
+    z                    }
                     }
+
+                    datagrid.DataSource = eventTable;
                 }
-
-
-                datagrid.DataSource = eventTable;
-
-                
-                connection.Close();
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred: {ex.Message}");
+                }
+                finally
+                {
+                    connection.Close();
+                }
             }
         }
+
 
 
         public void UnassignUserFromEvent(string selectedEventName, int selectedEventId, Person person,DataGridView datagrid)
@@ -837,6 +686,8 @@ namespace Assignment_Sdam
                 }
             }
         }
+
+        // participant
         public bool isFull(Event ceromony)
         {
             // Construct the table name by sanitizing the EventName
@@ -904,6 +755,8 @@ namespace Assignment_Sdam
             return false;
         }
 
+
+        // Admin
         public void DeleteOrganizerAndEvents(string organizerName)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))

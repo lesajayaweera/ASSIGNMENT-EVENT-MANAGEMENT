@@ -43,6 +43,11 @@ namespace Assignment_Sdam
             }
 
         }
+        public void DisplayEvent(DataGridView data)
+        {
+            Event ceromony = new Event();
+            ceromony.DisplayAllEvents(data);
+        }
 
 
 

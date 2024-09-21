@@ -72,6 +72,7 @@ namespace Assignment_Sdam
 
         public abstract void Register(Person person ,Form form);
         public abstract void Login(Person p1, Form F1);
+        
 
 
         
@@ -273,6 +274,38 @@ namespace Assignment_Sdam
                 finally
                 {
                     connection.Close(); 
+                }
+            }
+        }
+        public void DisplayAllEvents(DataGridView datagrid)
+        {
+
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+
+                    connection.Open();
+
+
+                    string query = "SELECT * FROM event_table";
+
+
+                    MySqlDataAdapter dataAdapter = new MySqlDataAdapter(query, connection);
+
+
+                    DataTable dataTable = new DataTable();
+
+
+                    dataAdapter.Fill(dataTable);
+
+
+                    datagrid.DataSource = dataTable;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
                 }
             }
         }

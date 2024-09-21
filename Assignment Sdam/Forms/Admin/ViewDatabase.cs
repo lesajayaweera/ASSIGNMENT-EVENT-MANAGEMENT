@@ -15,6 +15,7 @@ namespace Assignment_Sdam.Forms.Admin
     {
         private Person person;
         private Form form;
+        
         public ViewDatabase(Person person, Form form)
         {
             InitializeComponent();
@@ -25,9 +26,9 @@ namespace Assignment_Sdam.Forms.Admin
         private void ViewDatabase_Load(object sender, EventArgs e)
         {
             UsernameLabel_ViewDatabase.Text= $"Hi ! {person.Name},";
-            Database d1 = new Database();
-            d1.DisplayAllEvents(dataGridView_Events);
-            d1.DisplayAlltable(dataGridView_User);
+             EventController e1 = new EventController(person);
+            e1.DisplayEvent(dataGridView_Events);
+            e1.DisplayEvent(dataGridView_User);
 
         }
 

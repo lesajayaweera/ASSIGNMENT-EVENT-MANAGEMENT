@@ -17,6 +17,7 @@ namespace Assignment_Sdam
         private string username;
         private string role;
         private Person person;
+        
 
 
         public string Username
@@ -47,8 +48,8 @@ namespace Assignment_Sdam
         {
 
             UsernameLabel_ODashboard.Text = $"Hi! {Username},";
-            Database d1 = new Database();
-            d1.DisplayAllEvents(dataGridView_ODashboard);
+            EventController e1 =new EventController(person);
+            e1.DisplayEvent(dataGridView_ODashboard);
         }
 
         private void signoutButton_Click(object sender, EventArgs e)

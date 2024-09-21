@@ -35,8 +35,8 @@ namespace Assignment_Sdam
         private void AdminDashboard_Load(object sender, EventArgs e)
         {
             UsernameLabel_ADashboard.Text = $"Hi ! {username},";
-            Database d1 = new Database();
-            d1.DisplayAllEvents(dataGridView_ADashboard);
+            EventController controller = new EventController(person);
+            controller.DisplayEvent(dataGridView_ADashboard);
         }
 
         private void signoutButton_Click(object sender, EventArgs e)
