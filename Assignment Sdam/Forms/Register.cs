@@ -58,15 +58,18 @@ namespace Assignment_Sdam
 
             if (ParticipantRadioCheck_Register.Checked)
             {
-                person = new Participant(name, email, TelNo,"Participant" ,password);
-                person.Register(person,this);
+                ParticipantController participant =new  ParticipantController();
+                participant.Register(name, email, TelNo,"Participant" ,password,this);
+                
                
             }
             else if (OrganizerRadioCheckBtn_Register.Checked)
             {
-                person = new Organizer(name, email, TelNo, "Organizer",password);
-                person.Register(person,this);
+                OrganizerController organizer = new OrganizerController();
+                organizer.Register(name, email, TelNo, "Organizer",password,this);
                 
+
+
             }
             else if (AdminCheckBtn_Register.Checked)
             {

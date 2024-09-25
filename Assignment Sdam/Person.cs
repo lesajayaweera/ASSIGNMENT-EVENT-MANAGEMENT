@@ -277,38 +277,7 @@ namespace Assignment_Sdam
                 }
             }
         }
-        public void DisplayAllEvents(DataGridView datagrid)
-        {
-
-
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                try
-                {
-
-                    connection.Open();
-
-
-                    string query = "SELECT * FROM event_table";
-
-
-                    MySqlDataAdapter dataAdapter = new MySqlDataAdapter(query, connection);
-
-
-                    DataTable dataTable = new DataTable();
-
-
-                    dataAdapter.Fill(dataTable);
-
-
-                    datagrid.DataSource = dataTable;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-            }
-        }
+        
 
 
     }
